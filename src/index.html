@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lwaWang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,62 +18,38 @@
       integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
       crossorigin="anonymous"
     />
-    <!-- <script
-      src="https://kit.fontawesome.com/327a0d490c.js"
-      crossorigin="anonymous"
-    ></script> -->
   </head>
   <body>
     <header>
-      <h1><i class="fas fa-wallet"></i>Wallet</h1>
-      <p>Domowy budżet</p>
+      <h1><i class="fas fa-wallet"></i> Budżet domowy</h1>
     </header>
     <main>
       <section class="transactions">
         <h2 class="title">Lista transakcji</h2>
         <div class="transaction-list">
           <div class="income-area">
-            <h3>Przychód</h3>
+            <h3><i class="fas fa-money-bill-wave"></i> Przychód</h3>
             <div class="transaction" id="0">
-              <p class="transaction-name">
-                <i class="fas fa-money-bill-wave"></i>Wypłata
-              </p>
-              <p class="transaction-amount">
-                2000 zł
-                <button class="delete"><i class="fas fa-times"></i></button>
-              </p>
+              <!-- <p class="transaction-name">Wypłata</p> -->
+              <ul class="transaction-amount" id="incomeId">
+                <!-- 2000 zł -->
+                <!-- <button class="delete"><i class="fas fa-times"></i></button>
+                <button class="edit"><i class="fas fa-pen"></i></button> -->
+              </ul>
             </div>
           </div>
 
           <div class="expenses-area">
-            <h3>Wydatki</h3>
+            <h3><i class="fas fa-cart-arrow-down"></i> Wydatki</h3>
             <div class="transaction" id="1">
-              <p class="transaction-name">
-                <i class="fas fa-cart-arrow-down"></i>Zakupy
-              </p>
-              <p class="transaction-amount">
-                400 zł<button class="delete">
+              <p class="transaction-name">Zakupy</p>
+              <ul class="transaction-amount" id="expensesId">
+                400 zł
+                <!-- <button class="delete">
                   <i class="fas fa-times"></i>
                 </button>
-              </p>
-            </div>
-            <div class="transaction" id="2">
-              <p class="transaction-name">
-                <i class="fas fa-hamburger"></i>Jedzenie
-              </p>
-              <p class="transaction-amount">
-                100 zł<button class="delete">
-                  <i class="fas fa-times"></i>
-                </button>
-              </p>
-            </div>
-            <div class="transaction" id="3">
-              <p class="transaction-name"><i class="fas fa-film"></i>Kino</p>
-              <p class="transaction-amount">
-                50 zł<button class="delete">
-                  <i class="fas fa-times"></i>
-                </button>
-              </p>
+                <button class="edit"><i class="fas fa-pen"></i></button> -->
+              </ul>
             </div>
           </div>
         </div>
@@ -91,36 +67,25 @@
             <i class="far fa-trash-alt"></i>Usuń wszystko
           </button>
         </div>
-        <div class="style-section">
-          <h2 class="title">Wybierz styl:</h2>
-          <div class="color-buttons">
-            <button class="light"></button>
-            <button class="dark"></button>
-          </div>
-        </div>
       </section>
     </main>
     <div class="add-transaction-panel">
       <h2 class="title">Dodaj nową transakcję</h2>
       <label for="name">Nazwa:</label>
-      <small>(podaj nazwę transakcji)</small>
-      <input type="text" id="name" />
-
+      <input type="text" placeholder="Wprowadź nazwę transakcji" id="name" />
       <label for="amount">Kwota:</label>
-      <small
-        >(podaj nazwę transakcji, jeśli dodajesz wydatek, postaw znak minusa na
-        początku kwoty)</small
-      >
-      <input type="number" id="amount" />
-
+      <input
+        type="number"
+        name="value"
+        min="0"
+        placeholder="Wprowadź kwotę"
+        id="amount"
+      />
       <label for="category">Wybierz kategorię:</label>
-      <small>([ + ] oznacza przychód, [ - ] oznacza wydatek)</small>
-      <select name="category" onchange="selectedCategory()">
+      <select name="category">
         <option value="none" selected disabled></option>
-        <option value="income">[ + ] Przychód</option>
-        <option value="shopping">[ - ] Zakupy</option>
-        <option value="food">[ - ] Jedzenie</option>
-        <option value="cimena">[ - ] Kino</option>
+        <option class="incomeValue" value="income">Przychód</option>
+        <option class="expensesValue" value="expenses">Wydatek</option>
       </select>
       <div class="panel-buttons">
         <button class="save"><i class="fas fa-save"></i> Zapisz</button>

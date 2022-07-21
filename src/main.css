@@ -103,8 +103,13 @@ h2.title {
   margin-right: 10px;
 }
 
-.delete {
-  margin-left: 10px;
+li {
+  list-style: none;
+}
+
+.delete,
+.edit {
+  padding: 5px;
   background: none;
   border: none;
   font-size: 18px;
@@ -113,7 +118,8 @@ h2.title {
   transition: transform 0.3s;
 }
 
-.delete:hover {
+.delete:hover,
+.edit:hover {
   transform: scale(0.8);
 }
 
@@ -154,45 +160,17 @@ h2.title {
   margin-right: 10px;
 }
 
-.style-selection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.color-buttons button {
-  margin: 0 30px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.color-buttons button:hover {
-  transform: scale(0.9);
-}
-
-.color-buttons .light {
-  background: #f9f9f9;
-  border: 1px solid #14161f;
-}
-
-.color-buttons .dark {
-  background: #14161f;
-  border: 1px solid #f9f9f9;
-}
-
 .add-transaction-panel {
   display: none;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  /* position: absolute; */
+  margin: auto;
+  /* top: auto;
+  left: auto; */
+  width: 50%;
+  height: 50%;
   color: #fff;
   background-image: linear-gradient(315deg, #4c4177 0%, #2a5470 74%);
 }
