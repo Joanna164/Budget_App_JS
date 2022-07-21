@@ -1,4 +1,4 @@
-import { v4 as uuid4 } from "https://jspm.dev/uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 const querySelector = (selector) => document.querySelector(selector);
 const createElement = (element) => document.createElement(element);
@@ -32,31 +32,32 @@ const deleteAllBtn = querySelector(".delete-all");
 // let selectedCategory;
 // let moneyArr = [0];
 
+const deleteButtonFunc = (id) => {
+  transactionIncome = transactionIncome.filter(({ id: incomeId }) => {
+    return incomeId !== id;
+  });
+  transactionExpenses = transactionExpenses.filter(({ id: expensesId }) => {
+    return expensesId !== id;
+  });
+  renderApp();
+};
+
 const addDeleteBtn = (li, id) => {
   const deleteBtn = createElement("button");
-  deleteBtn.classList.add("delete");
+  deleteBtn.className = "delete";
   const addIconX = createElement("i");
-  addIconX.classList.add("fas fa-times");
+  addIconX.className = "fas fa-times";
   deleteBtn.appendChild(addIconX);
   li.appendChild(deleteBtn);
 
-  deleteBtn.addEventListener("click", () => {
-    transactionIncome = transactionIncome.filter(({ id: incomeId }) => {
-      return incomeId !== id;
-    });
-
-    transactionExpenses = transactionExpenses.filter(({ id: expensesId }) => {
-      return expensesId !== id;
-    });
-    renderApp();
-  });
+  deleteBtn.addEventListener("click", () => deleteButtonFunc(id));
 };
 
 const addEditBtn = (li) => {
   const editBtn = createElement("button");
-  editBtn.classList.add("edit");
+  editBtn.className = "edit";
   const addIconPen = createElement("i");
-  addIconPen.classList.add("fas fa-pen");
+  addIconPen.className = "fas fa-pen";
   editBtn.appendChild(addIconPen);
   li.appendChild(editBtn);
 };
@@ -82,8 +83,8 @@ const renderList = () => {
     li.appendChild(newExpenses);
     expensesId.appendChild(li);
 
-    addDeleteBtn();
-    addEditBtn();
+    addDeleteBtn(li, id);
+    addEditBtn(li);
   });
 };
 
@@ -101,13 +102,15 @@ const addTransaction = (event) => {
   const name = nameInput.value;
   const value = amountInput.value;
 
-  const id = uuid4();
+  // const id = uuidv4();
+  const id = Math.floor(Math.random() * 1000);
 
   // dopisać warunek, jeśli zostanie wybrana kategoria income to uruchom transactionIncome i na dodwrót
-  transactionIncome = [...transactionIncome, { name, value, id }];
 
-  transactionExpenses = [...transactionExpenses, { name, value, id }];
-  console.log({ name, value, id });
+  categorySelect.value === "income"
+    ? (transactionIncome = [...transactionIncome, { name, value, id }])
+    : (transactionExpenses = [...transactionExpenses, { name, value, id }]);
+  console.log(transactionIncome.forEach((item) => console.log(item.value)));
 
   nameInput.value = "";
   amountInput.value = "";
