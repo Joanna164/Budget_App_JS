@@ -5,7 +5,7 @@
 }
 
 :root {
-  --first-color: #f9f9f9;
+  --first-color: hsl(189, 100%, 95%);
   --second-color: #14161f;
   --border-color: rgba(0, 0, 0, 0.2);
 }
@@ -104,11 +104,12 @@ h2.title {
 }
 
 li {
-  list-style: none;
+  list-style: decimal;
 }
 
 .delete,
 .edit {
+  flex-wrap: nowrap;
   padding: 5px;
   background: none;
   border: none;
@@ -116,6 +117,8 @@ li {
   color: var(--second-color);
   cursor: pointer;
   transition: transform 0.3s;
+  align-content: center;
+  justify-content: flex-end;
 }
 
 .delete:hover,
@@ -172,7 +175,11 @@ li {
   width: 50%;
   height: 50%;
   color: #fff;
-  background-image: linear-gradient(315deg, #4c4177 0%, #2a5470 74%);
+  background-image: linear-gradient(
+    315deg,
+    hsl(252, 32%, 70%) 0%,
+    rgb(99, 150, 184) 74%
+  );
 }
 
 .add-transaction-panel h2.title {

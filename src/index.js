@@ -23,12 +23,9 @@ const categorySelect = querySelector("#category"); //select
 const addTransactionBtn = querySelector(".add-transaction");
 const saveBtn = querySelector(".save");
 const cancelBtn = querySelector(".cancel");
-// const deleteBtn = querySelector(".delete");
 const deleteAllBtn = querySelector(".delete-all");
 
-// let root = document.documentElement;
 // let ID = 0;
-// let categoryIcon;
 // let selectedCategory;
 // let moneyArr = [0];
 
@@ -92,9 +89,9 @@ const renderApp = () => {
   renderList();
 };
 
-saveBtn.addEventListener("click", (event) => {
-  addTransaction(event);
-});
+const editPanel = () => {
+  showPanel();
+};
 
 const addTransaction = (event) => {
   event.preventDefault();
@@ -105,16 +102,67 @@ const addTransaction = (event) => {
   // const id = uuidv4();
   const id = Math.floor(Math.random() * 1000);
 
-  // dopisać warunek, jeśli zostanie wybrana kategoria income to uruchom transactionIncome i na dodwrót
-
   categorySelect.value === "income"
     ? (transactionIncome = [...transactionIncome, { name, value, id }])
     : (transactionExpenses = [...transactionExpenses, { name, value, id }]);
-  console.log(transactionIncome.forEach((item) => console.log(item.value)));
+
+  sumFunction();
 
   nameInput.value = "";
   amountInput.value = "";
+
   renderApp();
+};
+
+const sumFunction = () => {
+  let sumValue;
+  categorySelect.value === "income"
+    ? (sumValue = transactionIncome
+        .map((item) => parseFloat(item.value))
+        .reduce((prev, curr) => prev + curr))
+    : (sumValue = transactionExpenses
+        .map((item) => parseFloat(item.value))
+        .reduce((prev, curr) => prev + curr));
+  showSum(sumValue);
+
+  // showBudget(sumValue);
+  // sumuje wartosci z li
+};
+
+const showSum = (sumValue) => {
+  const divWithSum = `<div class="show-sum" id="sum">Suma: ${sumValue}</div>`;
+  categorySelect.value === "income"
+    ? incomeSection.insertAdjacentHTML("beforeend", divWithSum)
+    : expensesSection.insertAdjacentHTML("beforeend", divWithSum);
+  // removeSum();
+
+  // nie znika po usunieciu wszytskich elementow
+  // dodaje sie za kazdym razem w momencie dodania nowego elementu
+};
+
+// const removeSum = () => {
+//   const removeSumDiv = document.getElementById("sum");
+//   incomeSection.removeChild(removeSumDiv);
+//   expensesSection.removeChild(removeSumDiv);
+// };
+
+const showBudget = (sumValue) => {
+  // const newArr = [sumValue];
+  // const value = sumValue
+  //   .map((item) => parseFloat(item.value))
+  //   .reduce((a, b) => a + b);
+  // const sumPanel = sumFunction(sumValue).reduce((a, b) => a + b);
+
+  // availableMoney.textContent = `${value} zł`;
+
+  console.log(value);
+  //suma przych + syma wyd
+  // if wieksze/mniejsze
+  // Jeżeli suma przychodów jest większa od wydatków to aplikacja
+  //   powinna pokazywać komunikat: “Możesz jeszcze wydać XXX złotych”.
+  //   Jeżeli różnica wyniesie 0, komunikat powinien brzmieć: “Bilans wynosi zero”.
+  //   Jeżeli wydatków jest więcej, komunikat powinien wyglądać tak: “Bilans jest
+  //   ujemny. Jesteś na minusie XXX złotych”.
 };
 
 const showPanel = () => {
@@ -132,7 +180,8 @@ const checkForm = () => {
     amountInput.value !== "" &&
     categorySelect.value !== "none"
   ) {
-    createNewTransaction();
+    // createNewTransaction();
+    addTransaction();
   } else {
   }
   alert("Wypełnij wszystkie pola!");
@@ -144,17 +193,10 @@ const clearInputs = () => {
   categorySelect.selectedIndex = 0;
 };
 
-const checkCategory = (transaction) => {
-  switch (transaction) {
-    case "[ + ] Przychód":
-      categoryIcon = '<i class = "fas fa-money-bill-wave"></i>';
-      break;
-    case "[ - ] Wydatki":
-      categoryIcon = '<i class = "fas fa-cart-arrow-down"></i>';
-      break;
-  }
-};
-
 addTransactionBtn.addEventListener("click", showPanel);
-// cancelBtn.addEventListener("click", closePanel);
+cancelBtn.addEventListener("click", closePanel);
+saveBtn.addEventListener("click", (event) => {
+  addTransaction(event);
+  closePanel();
+});
 // saveBtn.addEventListener("click", checkForm);
