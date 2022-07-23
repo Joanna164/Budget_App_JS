@@ -25,17 +25,28 @@ const saveBtn = querySelector(".save");
 const cancelBtn = querySelector(".cancel");
 const deleteAllBtn = querySelector(".delete-all");
 
-// let ID = 0;
-// let selectedCategory;
+// let entryList = [];
+
+let id = 0;
+// // let selectedCategory;
 // let moneyArr = [0];
 
 const deleteButtonFunc = (id) => {
-  transactionIncome = transactionIncome.filter(({ id: incomeId }) => {
-    return incomeId !== id;
-  });
-  transactionExpenses = transactionExpenses.filter(({ id: expensesId }) => {
-    return expensesId !== id;
-  });
+  const type = transactionIncome.find(({ id: incomeId }) => incomeId === id)
+    ? "income"
+    : "expenses";
+
+  type === "income"
+    ? (transactionIncome = transactionIncome.filter(({ id: incomeId }) => {
+        return incomeId !== id;
+      }))
+    : (transactionExpenses = transactionExpenses.filter(
+        ({ id: expensesId }) => {
+          return expensesId !== id;
+        }
+      ));
+
+  sumFunction(type);
   renderApp();
 };
 
@@ -57,6 +68,8 @@ const addEditBtn = (li) => {
   addIconPen.className = "fas fa-pen";
   editBtn.appendChild(addIconPen);
   li.appendChild(editBtn);
+
+  editBtn.addEventListener("click", showPanel);
 };
 
 const renderList = () => {
@@ -65,16 +78,18 @@ const renderList = () => {
 
   transactionIncome.map(({ name, value, id }) => {
     const li = createElement("li");
+    li.className = "incomeLi";
     const newIncome = createElement("div");
     newIncome.innerHTML = `${name} - ${value} zł`;
     li.appendChild(newIncome);
     incomeId.appendChild(li);
     addDeleteBtn(li, id);
     addEditBtn(li);
+    console.log(li);
   });
   transactionExpenses.map(({ name, value, id }) => {
     const li = createElement("li");
-
+    li.className = "expenseLi";
     const newExpenses = createElement("div");
     newExpenses.innerHTML = `${name} - ${value} zł`;
     li.appendChild(newExpenses);
@@ -91,6 +106,9 @@ const renderApp = () => {
 
 const editPanel = () => {
   showPanel();
+  cancelBtn.addEventListener("click", () => {
+    addTransactionPanel.style.display = "none";
+  });
 };
 
 const addTransaction = (event) => {
@@ -100,67 +118,94 @@ const addTransaction = (event) => {
   const value = amountInput.value;
 
   // const id = uuidv4();
-  const id = Math.floor(Math.random() * 1000);
+  // const id = Math.floor(Math.random() * 1000);
 
   categorySelect.value === "income"
     ? (transactionIncome = [...transactionIncome, { name, value, id }])
     : (transactionExpenses = [...transactionExpenses, { name, value, id }]);
 
-  sumFunction();
-
+  sumFunction(categorySelect.value);
+  // showBudget(transactionIncome, transactionExpenses);
+  console.log(transactionIncome);
+  console.log(transactionExpenses);
+  id++;
   nameInput.value = "";
   amountInput.value = "";
 
   renderApp();
 };
 
-const sumFunction = () => {
+const sumFunction = (type) => {
   let sumValue;
-  categorySelect.value === "income"
-    ? (sumValue = transactionIncome
+  type === "income"
+    ? ((sumValue = transactionIncome
         .map((item) => parseFloat(item.value))
-        .reduce((prev, curr) => prev + curr))
+        .reduce((prev, curr) => prev + curr, 0)),
+      0)
     : (sumValue = transactionExpenses
         .map((item) => parseFloat(item.value))
-        .reduce((prev, curr) => prev + curr));
+        .reduce((prev, curr) => prev + curr, 0));
 
   if (sumValue > 0) {
-    showSum(sumValue);
+    showSum(type, sumValue);
   }
 
-  // showBudget(sumValue);
   // sumuje wartosci z li
 };
 
-const showSum = (sumValue) => {
-  removeSum();
-  const divWithSum = `<div class="show-sum" id="sum">Suma: ${sumValue}</div>`;
-  categorySelect.value === "income"
-    ? incomeSection.insertAdjacentHTML("beforeend", divWithSum)
-    : expensesSection.insertAdjacentHTML("beforeend", divWithSum);
+const showSum = (type, sumValue) => {
+  const divWithSum = `<div class="show-sum" id="sum">
+      Suma: ${sumValue}
+    </div>`;
 
-  // nie znika po usunieciu wszytskich elementow
-  // dodaje sie za kazdym razem w momencie dodania nowego elementu
-};
+  if (type === "income") {
+    const sum = incomeSection.querySelector("#sum");
 
-const removeSum = () => {
-  const removeSumDiv = document.getElementById("sum");
-  if (removeSumDiv) {
-    incomeSection.removeChild(removeSumDiv);
-    expensesSection.removeChild(removeSumDiv);
+    sum
+      ? (sum.innerHTML = `Suma: ${sumValue}`)
+      : incomeSection.insertAdjacentHTML("beforeend", divWithSum);
+  } else {
+    const sum = expensesSection.querySelector("#sum");
+
+    sum
+      ? (sum.innerHTML = `Suma: ${sumValue}`)
+      : expensesSection.insertAdjacentHTML("beforeend", divWithSum);
   }
+
+  // showBudget(transactionIncome, transactionExpenses);
+  // removeSum(sumValue);
 };
 
-const showBudget = (sumValue) => {
-  // const newArr = [sumValue];
-  // const value = sumValue
-  //   .map((item) => parseFloat(item.value))
-  //   .reduce((a, b) => a + b);
-  // const sumPanel = sumFunction(sumValue).reduce((a, b) => a + b);
+// const removeSum = (sumValue) => {
+//   const clearSum = `<div class="show-sum" id="sum">
+//   Suma: 0 zł
+// </div>`;
 
-  // availableMoney.textContent = `${value} zł`;
+//   (transactionIncome.length = 0) || (transactionExpenses.length = 0)
+//     ? removeSumDiv
+//     : clearSum;
+//   // }
+//   // if ((transactionExpenses.length = 0)) {
+//   //   divWithSum = clearSum;
+//   // }
 
-  console.log(value);
+//   const removeSumDiv = document.getElementById("sum");
+//   if (removeSumDiv) {
+//     removeSumDiv.innerHTML = `Suma: ${sumValue}`;
+//     incomeSection.removeChild(removeSumDiv);
+//     expensesSection.removeChild(removeSumDiv);
+//   }
+// };
+
+const showBudget = (transactionIncome, transactionExpenses) => {
+  console.log(transactionIncome.value);
+  const sumPanelIncme = transactionIncome.reduce((a, b) => a + b);
+  const sumPanelExp = transactionExpenses.reduce((a, b) => a + b);
+  // transactionIncome.value + transactionExpenses.value;
+  const sumPanel = sumPanelIncme - sumPanelExp;
+  console.log(transactionIncome.value);
+  availableMoney.textContent = `${sumPanel} zł`;
+
   //suma przych + syma wyd
   // if wieksze/mniejsze
   // Jeżeli suma przychodów jest większa od wydatków to aplikacja
@@ -186,7 +231,8 @@ const checkForm = () => {
     categorySelect.value !== "none"
   ) {
     // createNewTransaction();
-    addTransaction();
+    // addTransaction();
+    console.log("jest ok");
   } else {
   }
   alert("Wypełnij wszystkie pola!");
@@ -204,4 +250,46 @@ saveBtn.addEventListener("click", (event) => {
   addTransaction(event);
   closePanel();
 });
+
 // saveBtn.addEventListener("click", checkForm);
+
+// const addIncome = () => {
+//   if (!nameInput.value || !amountInput.value) return;
+//   let income = {
+//     type: "incomeLi",
+//     title: nameInput.value,
+//     amount: parseFloat(amountInput.value),
+//   };
+//   entyList.push(income);
+//   clearInput([nameInput, amountInput]);
+// };
+
+// const addExpense = () => {
+//   if (!nameInput.value || !amountInput.value) return;
+//   let expense = {
+//     type: "expenseLi",
+//     title: nameInput.value,
+//     amount: parseFloat(amountInput.value),
+//   };
+//   entyList.push(expense);
+//   clearInput([nameInput, amountInput]);
+// };
+
+// const clearInput = (inputsArray) => {
+//   inputsArray.forEach((input) => {
+//     input.value = "";
+//   });
+// };
+
+// const calculateSum = () => {
+//   let sum = 0;
+//   entyList.forEach((entry) => {
+//     if (entry.type == type) {
+//       sum += entry.amount;
+//     }
+//   });
+//   return sum;
+// };
+
+// income = calculateSum("income", entyList);
+// outcome = calculateSum("expense", entyList);
