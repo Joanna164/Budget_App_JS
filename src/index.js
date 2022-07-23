@@ -123,28 +123,33 @@ const sumFunction = () => {
     : (sumValue = transactionExpenses
         .map((item) => parseFloat(item.value))
         .reduce((prev, curr) => prev + curr));
-  showSum(sumValue);
+
+  if (sumValue > 0) {
+    showSum(sumValue);
+  }
 
   // showBudget(sumValue);
   // sumuje wartosci z li
 };
 
 const showSum = (sumValue) => {
+  removeSum();
   const divWithSum = `<div class="show-sum" id="sum">Suma: ${sumValue}</div>`;
   categorySelect.value === "income"
     ? incomeSection.insertAdjacentHTML("beforeend", divWithSum)
     : expensesSection.insertAdjacentHTML("beforeend", divWithSum);
-  // removeSum();
 
   // nie znika po usunieciu wszytskich elementow
   // dodaje sie za kazdym razem w momencie dodania nowego elementu
 };
 
-// const removeSum = () => {
-//   const removeSumDiv = document.getElementById("sum");
-//   incomeSection.removeChild(removeSumDiv);
-//   expensesSection.removeChild(removeSumDiv);
-// };
+const removeSum = () => {
+  const removeSumDiv = document.getElementById("sum");
+  if (removeSumDiv) {
+    incomeSection.removeChild(removeSumDiv);
+    expensesSection.removeChild(removeSumDiv);
+  }
+};
 
 const showBudget = (sumValue) => {
   // const newArr = [sumValue];
