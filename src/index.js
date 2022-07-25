@@ -95,16 +95,34 @@ const renderList = () => {
   });
 };
 
-const renderApp = () => {
-  renderList();
-};
-
 const editPanel = () => {
   showPanel();
   cancelBtn.addEventListener("click", () => {
     addTransactionPanel.style.display = "none";
   });
 };
+
+const renderApp = () => {
+  renderList();
+};
+
+// const editTransaction = (event) => {
+
+//   const editionName = event.target.closest("li");
+//   const editionAmount = event.target.closest("li");
+//   const editionSelect = event.target.closest("li");
+//   nameInput.value = editionName.firstChild.textContent;
+//   amountInput.value = editionAmount.firstChild.textContent;
+//   categorySelect.value = editionSelect.firstChild.textContent;
+
+//   console.log(editionName, editionAmount, editionSelect);
+// };
+
+// const checkClick = (event) => {
+//   if (event.target.closest("button").className.contains("edit")) {
+//     editTransaction(event);
+//   }
+// };
 
 const addTransaction = (event) => {
   event.preventDefault();
@@ -116,7 +134,7 @@ const addTransaction = (event) => {
     alert("Wpisz poprawną kwotę!");
   } else if (name == "") {
     alert("Wpisz poprawną nazwę transakcji!");
-  } else if (value < 1) {
+  } else if (value < 0) {
     alert("Wpisz poprawną kwotę!");
   } else {
     categorySelect.value === "income"
@@ -127,8 +145,6 @@ const addTransaction = (event) => {
   sumFunction(categorySelect.value);
 
   showBudget(transactionIncome, transactionExpenses);
-
-  console.log(transactionIncome, transactionExpenses);
 
   id++;
   nameInput.value = "";
@@ -165,13 +181,13 @@ const showSum = (type, sumValueIncome, sumValueExpense) => {
     const sum = incomeSection.querySelector("#sum");
 
     sum
-      ? (sum.innerHTML = `Suma: ${sumValueIncome}`)
+      ? (sum.innerHTML = `Suma: ${sumValueIncome.toFixed(2)}`)
       : incomeSection.insertAdjacentHTML("beforeend", divWithSumIncome);
   } else {
     const sum = expensesSection.querySelector("#sum");
 
     sum
-      ? (sum.innerHTML = `Suma: ${sumValueExpense}`)
+      ? (sum.innerHTML = `Suma: ${sumValueExpense.toFixed(2)}`)
       : expensesSection.insertAdjacentHTML("beforeend", divWithSumExpense);
   }
 
@@ -195,13 +211,13 @@ const showBudget = (transactionIncome, transactionExpenses) => {
 const showBalance = (sumPanel) => {
   if (sumPanel > 0) {
     title.textContent = "Możesz jeszcze wydać:";
-    availableMoney.textContent = `${sumPanel} zł`;
+    availableMoney.textContent = `${sumPanel.toFixed(2)} zł`;
   } else if (sumPanel < 0) {
     title.textContent = "Bilans jest ujemny. Jesteś na minusie:";
-    availableMoney.textContent = `${sumPanel} zł`;
+    availableMoney.textContent = `${sumPanel.toFixed(2)} zł`;
   } else {
     title.textContent = "Bilans wynosi:";
-    availableMoney.textContent = `${sumPanel} zł`;
+    availableMoney.textContent = `${sumPanel.toFixed(2)} zł`;
   }
 };
 
@@ -212,20 +228,6 @@ const showPanel = () => {
 const closePanel = () => {
   addTransactionPanel.style.display = "none";
   clearInputs();
-};
-
-const checkForm = () => {
-  if (
-    nameInput.value !== "" &&
-    amountInput.value !== "" &&
-    categorySelect.value !== "none"
-  ) {
-    // createNewTransaction();
-    // addTransaction();
-    console.log("jest ok");
-  } else {
-  }
-  alert("Wypełnij wszystkie pola!");
 };
 
 const clearInputs = () => {
@@ -240,5 +242,3 @@ saveBtn.addEventListener("click", (event) => {
   addTransaction(event);
   closePanel();
 });
-
-// saveBtn.addEventListener("click", checkForm);
