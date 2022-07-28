@@ -163,7 +163,8 @@ li {
   margin-right: 10px;
 }
 
-.add-transaction-panel {
+.add-transaction-panel,
+.edit-transaction-panel {
   display: none;
   justify-content: center;
   align-items: center;
@@ -182,30 +183,35 @@ li {
   );
 }
 
-.add-transaction-panel h2.title {
+.add-transaction-panel h2.title,
+.edit-transaction-panel h2.title {
   margin-bottom: 0;
 }
 
-.add-transaction-panel label {
+.add-transaction-panel label,
+.edit-transaction-panel label {
   margin-top: 40px;
   margin-bottom: 5px;
   font-size: 26px;
 }
 
-.add-transaction-panel small {
+.add-transaction-panel,
+.edit-transaction-panel {
   margin-bottom: 15px;
   font-style: italic;
   color: #ddd;
 }
 
 .add-transaction-panel input,
-.add-transaction-panel select {
+.add-transaction-panel select,
+.edit-transaction-panel input {
   width: 580px;
 }
 
 .add-transaction-panel input,
 .add-transaction-panel select,
-.add-transaction-panel option {
+.add-transaction-panel option,
+.edit-transaction-panel input {
   padding: 10px 20px;
   border: 1px solid black;
   border-radius: 5px;
@@ -213,17 +219,20 @@ li {
 
 .add-transaction-panel input,
 .add-transaction-panel select,
-.add-transaction-panel option {
+.add-transaction-panel option,
+.edit-transaction-panel input {
   font-size: 18px;
 }
 
-.add-transaction-panel .panel-buttons {
+.add-transaction-panel .panel-buttons,
+.edit-transaction-panel .panel-buttons {
   display: flex;
   justify-content: center;
   margin-top: 30px;
 }
 
-.add-transaction-panel button {
+.add-transaction-panel button,
+.edit-transaction-panel button {
   margin: 0 30px;
   padding: 15px 40px;
   font-size: 18px;
@@ -234,6 +243,7 @@ li {
   transition: background-color 0.3s;
 }
 
-.add-transaction-panel button:hover {
+.add-transaction-panel button:hover,
+.edit-transaction-panel button:hover {
   background-color: rgb(25, 27, 51);
 }

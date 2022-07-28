@@ -23,6 +23,10 @@ const addTransactionBtn = querySelector(".add-transaction");
 const saveBtn = querySelector(".save");
 const cancelBtn = querySelector(".cancel");
 const deleteAllBtn = querySelector(".delete-all");
+const editTransactionPanel = querySelector(".edit-transaction-panel");
+const editName = querySelector("#edit-name");
+const editAmount = querySelector("#edit-amount");
+const saveEditBtn = querySelector("#save-edit");
 
 let id = 0;
 
@@ -57,7 +61,7 @@ const addDeleteBtn = (li, id) => {
   deleteBtn.addEventListener("click", () => deleteButtonFunc(id));
 };
 
-const addEditBtn = (li) => {
+const addEditBtn = (li, id) => {
   const editBtn = createElement("button");
   editBtn.className = "edit";
   const addIconPen = createElement("i");
@@ -65,7 +69,7 @@ const addEditBtn = (li) => {
   editBtn.appendChild(addIconPen);
   li.appendChild(editBtn);
 
-  editBtn.addEventListener("click", showPanel);
+  editBtn.addEventListener("click", (event) => showEditPanel(li, id, event));
 };
 
 const renderList = () => {
@@ -80,7 +84,7 @@ const renderList = () => {
     li.appendChild(newIncome);
     incomeId.appendChild(li);
     addDeleteBtn(li, id);
-    addEditBtn(li);
+    addEditBtn(li, id);
   });
   transactionExpenses.map(({ name, value, id }) => {
     const li = createElement("li");
@@ -91,38 +95,71 @@ const renderList = () => {
     expensesId.appendChild(li);
 
     addDeleteBtn(li, id);
-    addEditBtn(li);
+    addEditBtn(li, id);
+    editPanel();
   });
 };
 
 const editPanel = () => {
-  showPanel();
+  showEditPanel();
   cancelBtn.addEventListener("click", () => {
-    addTransactionPanel.style.display = "none";
+    editTransactionPanel.style.display = "none";
+    closePanel();
   });
+};
+
+const showEditPanel = (li, id, event) => {
+  event.preventDefault();
+  editTransactionPanel.style.display = "flex";
+
+  const typeEdit = transactionIncome.find(({ id: incomeId }) => incomeId === id)
+    ? "income"
+    : "expenses";
+
+  if (typeEdit === "income") {
+    const { name, value } = transactionIncome.find(
+      ({ id: incomeId }) => incomeId === id
+    );
+    editName.value = name;
+    editAmount.value = value;
+    const setUpdateIncome = (newName, newValue) => {
+      const editIncome = transactionIncome.map((transaction) =>
+        transaction.id === incomeId
+          ? { ...transactionIncome, name: newName, value: newValue }
+          : transactionIncome
+      );
+      transactionIncome = editIncome;
+    };
+    saveEditBtn.addEventListener(
+      "click",
+      setUpdateIncome(editName.value, editAmount.value)
+    );
+  } else {
+    const { name, value } = transactionExpenses.find(
+      ({ id: expensesId }) => expensesId === id
+    );
+    editName.value = name;
+    editAmount.value = value;
+
+    const setUpdateExpenses = (expensesId, newName, newValue) => {
+      const editExpenses = transactionExpenses.map((transaction) =>
+        transaction.id === expensesId
+          ? { ...transactionExpenses, name: newName, value: newValue }
+          : transactionExpenses
+      );
+      transactionExpenses = editExpenses;
+    };
+    saveEditBtn.addEventListener("click", setUpdateExpenses());
+  }
+
+  // const setStudentName = (studentId, newName) => {
+  //   const newStudents = students.map((student) => student.id === studentId ? {...student, name: newName} : student);
+  //   students = newStudents;
 };
 
 const renderApp = () => {
   renderList();
 };
-
-// const editTransaction = (event) => {
-
-//   const editionName = event.target.closest("li");
-//   const editionAmount = event.target.closest("li");
-//   const editionSelect = event.target.closest("li");
-//   nameInput.value = editionName.firstChild.textContent;
-//   amountInput.value = editionAmount.firstChild.textContent;
-//   categorySelect.value = editionSelect.firstChild.textContent;
-
-//   console.log(editionName, editionAmount, editionSelect);
-// };
-
-// const checkClick = (event) => {
-//   if (event.target.closest("button").className.contains("edit")) {
-//     editTransaction(event);
-//   }
-// };
 
 const addTransaction = (event) => {
   event.preventDefault();
@@ -195,7 +232,6 @@ const showSum = (type, sumValueIncome, sumValueExpense) => {
 };
 
 const showBudget = (transactionIncome, transactionExpenses) => {
-  // console.log(transactionIncome, transactionExpenses);
   const sumPanelIncme = transactionIncome
     .map((item) => parseFloat(item.value))
     .reduce((prev, curr) => prev + curr, 0);
@@ -242,3 +278,4 @@ saveBtn.addEventListener("click", (event) => {
   addTransaction(event);
   closePanel();
 });
+// saveEditBtn.addEventListener("click", () => {});
